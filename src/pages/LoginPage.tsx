@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import api from '../api'
 import { loginSuccess } from '../store/reducers/auth';
 import { Navigate } from 'react-router-dom';
 import axios from 'axios';
+import { fetchTasks } from '../store/reducers/task';
+import { useAppDispatch, useAppSelector } from '../store/hooksTipados';
 export const LoginPage = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+    const tasks = useAppSelector((state) => state.task.items);
+
     const [myEmail, setEmail] = useState('');
     const [myPassword, setPassword] = useState('');
+
+
+    useEffect(() => {
+        dispatch(fetchTasks())
+        console.log(tasks)
+    }, [dispatch])
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

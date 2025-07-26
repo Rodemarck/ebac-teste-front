@@ -9,7 +9,7 @@ interface PrivateRouteProps {
 
 const Authenticated = ({ children }: PrivateRouteProps) => {
   const token = useSelector((state: RootState) => state.auth.token);
-  console.log((token == undefined || token == null ? 'deslogado' : 'logado'));
+  console.log((token === undefined || token === null ? 'deslogado' : 'logado'));
 
   if (!token) {
     return <Navigate to="/login" replace />;

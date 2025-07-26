@@ -1,46 +1,60 @@
-# Getting Started with Create React App
+# Arquitetura do Projeto
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto utiliza **React** com **Redux Toolkit** para gerenciamento de estado global, **React Router** para navegação entre páginas, e **Styled Components** para estilização. Abaixo estão os principais componentes da arquitetura:
 
-## Available Scripts
+## Estrutura de Pastas
 
-In the project directory, you can run:
+- **src/**
+  - **api.ts**: Configuração dos clientes Axios para comunicação com a API backend, incluindo interceptadores para autenticação.
+  - **App.tsx**: Componente principal que inicializa o roteamento.
+  - **routes.tsx**: Define as rotas da aplicação utilizando `react-router-dom`.
+  - **Authenticated.tsx**: Componente de rota protegida, verifica se o usuário está autenticado antes de permitir acesso.
+  - **pages/**: Contém as páginas principais (`HomePage.tsx`, `LoginPage.tsx`).
+  - **store/**: Gerenciamento de estado global com Redux Toolkit.
+    - **reducers/**: Slices para autenticação (`auth.ts`) e tarefas (`task.ts`).
+    - **hooksTipados.ts**: Hooks customizados tipados para uso do Redux.
+    - **index.ts**: Configuração da store Redux.
+  - **types/**: Tipos TypeScript utilizados em todo o projeto (`task.ts`).
 
-### `npm start`
+## Fluxo de Autenticação
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- O token JWT é armazenado no `localStorage` após login.
+- O slice de autenticação (`auth.ts`) gerencia o estado do usuário e token.
+- O componente [`Authenticated`](src/Authenticated.tsx) protege rotas privadas, redirecionando para `/login` se não houver token.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Gerenciamento de Tarefas
 
-### `npm test`
+- O slice [`task`](src/store/reducers/task.ts) utiliza `createAsyncThunk` para requisições assíncronas à API.
+- As tarefas são carregadas, criadas, atualizadas e removidas via chamadas à API, com atualização automática do estado global.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Navegação
 
-### `npm run build`
+- As rotas são definidas em [`routes.tsx`](src/routes.tsx), utilizando o componente `Routes` do React Router.
+- Páginas principais: Home (`HomePage.tsx`) e Login (`LoginPage.tsx`).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Estilização
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Utiliza [`styled-components`](https://styled-components.com/) para componentes customizados.
+- Integração com [`react-bootstrap`](https://react-bootstrap.github.io/) para componentes visuais.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Testes
 
-### `npm run eject`
+- Configuração de testes com [`@testing-library/react`](https://testing-library.com/docs/react-testing-library/intro/) e [`jest`](https://jestjs.io/).
+- Testes de componentes em [`App.test.tsx`](src/App.test.tsx).
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Como funciona o ciclo de dados
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Usuário faz login, token é salvo no localStorage e no estado global.
+2. Requisições à API utilizam o token para autenticação.
+3. Tarefas são carregadas e manipuladas via Redux, refletindo automaticamente na interface.
+4. Navegação entre páginas é controlada pelo React Router, com proteção de rotas.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Para mais detalhes sobre cada componente, consulte os arquivos correspondentes:
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [src/api.ts](src/api.ts)
+- [src/store/reducers/auth.ts](src/store/reducers/auth.ts)
+- [src/store/reducers/task.ts](src/store/reducers/task.ts)
+- [src/pages/HomePage.tsx](src/pages/HomePage.tsx)
+- [src/pages/LoginPage.tsx](src/pages/LoginPage.tsx)

@@ -3,18 +3,19 @@ export type User = {
     id?: number;
 }
 export type Task = {
-    id: number;
+    id?: number;
     title: string;
     description: string;
     deadLine: Date;
-    user: User;
-    status: Status
+    user?: User;
+    status?: Status
 }
 
-export type Status = 'Pendente' | 'Em andamento' | 'Concluída';
+
+export type Status = 'Pendente' | 'Em andamento' | 'Concluída' | 'DONE' | 'IN_PROGRESS' | 'PENDING';
 
 export interface CardItem {
-    id: number;
+    id?: number;
     title: string;
     description: string;
     status: Status;
